@@ -1,0 +1,121 @@
+
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saudação</title>
+ <link rel="manifest" href="manifest.json">
+ <meta name="theme-color" content="000000">
+ <style>
+        body {
+            transition: background-color 3s;
+            font-family: Arial, sans-serif;
+            color: black;
+            text-align: center;
+            padding-top: 70px;
+        }
+
+
+        @media(max-width:768px){
+            body { font-size: 35px; padding-top: 50px; }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="Titulo">Bem Vindo(@)!</h1>
+    <p id="hora"></p>
+    <p id="data"></p>
+    <p id="frase"></p> <!-- Adicionado para mostrar a frase -->
+
+
+    <script>
+        let frases = [];
+
+
+        function trocar() {
+            const agora = new Date();
+            const hora = agora.getHours();
+            const minutos = agora.getMinutes().toString().padStart(2, "0");
+            const segundos = agora.getSeconds().toString().padStart(2, "0");
+
+
+            const opcoes = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+
+
+            const dataFormatada = agora.toLocaleDateString("pt-BR", opcoes);
+            let cor;
+            let mensagem;
+
+
+            if (hora >= 6 && hora < 12) {
+                cor = "#A6D9FF"; // azul claro manhã
+                mensagem = "Bom dia!☀️";
+                frases = [
+                    "Hoje é um recomeço",
+                    "A luz chegou, respira fundo",
+                    "Vai dar certo"
+                ];
+            } else if (hora >= 12 && hora < 18) {
+                cor = "#FFB46F"; // laranja pastel tarde
+                mensagem = "Boa tarde!⛅";
+                frases = [
+                    "Força para continuar",
+                    "O agora importa",
+                    "Você está indo bem"
+                ];
+            } else if (hora >= 18 && hora < 23) {
+                cor = "#003965"; // azul escuro noite
+                mensagem = "Boa noite!🌙🌟";
+                frases = [
+                    "Gratidão pelo dia",
+                    "Descanse a mente",
+                    "Paz no coração"
+                ];
+            } else {
+                cor = "#323D5E"; // azul apagado
+                mensagem = "Está na hora de descansar!";
+                frases = [
+                    "Silêncio que acalma",
+                    "O corpo pede pausa",
+                    "Amanhã é novo"
+                ];
+            }
+
+
+            document.body.style.backgroundColor = cor;
+            document.getElementById("Titulo").innerHTML = mensagem;
+            document.getElementById("hora").innerHTML = "Agora são " + hora + ":" + minutos + ":" + segundos;
+            document.getElementById("data").innerHTML = "📆 " + dataFormatada;
+        }
+
+
+        function trocarFrase() {
+            if (frases.length > 0) {
+                const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+                document.getElementById("frase").innerHTML = `"${fraseAleatoria}"`;
+            }
+        }
+
+
+        trocar();
+        trocarFrase();
+        setInterval(trocar, 1000);
+        setInterval(trocarFrase, 5000);
+
+
+        window.onload = trocar;
+    </script>
+    <script>
+        if ("serviceWorker" in navigator){
+            navigator.serviceWorker.register("service-worker.js")
+            .then(() => console.log("Service Worker registrado"))
+            .catch(err => console.log("Erro no SW"))
+        }
+    </script>
+</body>
+</html>
